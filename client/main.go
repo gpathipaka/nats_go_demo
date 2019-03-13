@@ -25,5 +25,16 @@ func main() {
 		}
 		log.Println("Message Received ", orderServiceDiscovery.OrderServiceUri)
 	}
+
+	msg, err = natsConn.Request("Discovery.Email", nil, 1000*time.Microsecond)
+	if err == nil && msg != nil {
+		log.Println("*************")
+		orderServiceDiscovery := pb.ServiceDiscovery{}
+		err := proto.Unmarshal(msg.Data, &orderServiceDiscovery)
+		if err != nil {
+			log.Println("error ", err)
+		}
+		log.Println("Email Service Message Received ", orderServiceDiscovery.OrderServiceUri)
+	}
 	log.Println("Exiting client....")
 }

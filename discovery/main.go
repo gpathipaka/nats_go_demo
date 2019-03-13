@@ -22,5 +22,13 @@ func main() {
 			natsConn.Publish(m.Reply, data)
 		}
 	})
+
+	natsConn.Subscribe("Discovery.Email", func(m *nats.Msg) {
+		orderServDiscovery := &pb.ServiceDiscovery{OrderServiceUri: "http://localhost:80/EmailUri"}
+		data, err := proto.Marshal(orderServDiscovery)
+		if err == nil {
+			natsConn.Publish(m.Reply, data)
+		}
+	})
 	runtime.Goexit()
 }
